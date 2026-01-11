@@ -18,6 +18,17 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'AI Referee API is running' });
 });
 
+// Serve static files from React build (production only)
+if (process.env.NODE_ENV === 'production') {
+  const path = require('path');
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+}
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
