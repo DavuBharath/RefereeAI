@@ -1,31 +1,14 @@
 /**
- * RefereeAI - Decision Engine
- * 
- * PURPOSE:
- * This engine helps users choose between technical options by:
- * 1. Scoring each option based on user constraints
- * 2. Detecting trade-offs between options
- * 3. Generating balanced recommendations (never declaring a single "best")
- * 
- * DESIGN PHILOSOPHY:
- * - Transparent: Every calculation is explainable
- * - Educational: Teaches users HOW to decide
- * - Balanced: No single winner, just trade-offs
+ * RefereeAI - Decision Engine (Vanilla JS)
+ * Analyzes options based on user constraints
  */
 
-class DecisionEngine {
+const DecisionEngine = {
   
   /**
-   * STEP 1: Calculate Constraint-Based Weights
-   * 
-   * Each constraint adjusts the importance of different criteria.
-   * Example: Low budget → cost weight increases from 1.0 to 2.5
-   * 
-   * @param {Object} constraints - User's specific situation
-   * @returns {Object} weights - Adjusted importance multipliers
+   * Calculate constraint-based weights
    */
-  static calculateWeights(constraints) {
-    // Start with neutral weights (everything equally important)
+  calculateWeights(constraints) {
     const weights = {
       budgetSuitability: 1.0,
       scalability: 1.0,
@@ -33,74 +16,55 @@ class DecisionEngine {
       setupSpeed: 1.0
     };
     
-    // BUDGET CONSTRAINT
-    // Low budget → cost becomes critical (2.5x more important)
-    // High budget → cost less important, focus on capabilities
+    // Budget constraint
     if (constraints.budget === 'low') {
       weights.budgetSuitability = 2.5;
-      weights.setupSpeed = 1.3; // Also want quick, cheap setup
+      weights.setupSpeed = 1.3;
     } else if (constraints.budget === 'high') {
-      weights.budgetSuitability = 0.5; // Cost doesn't matter much
-      weights.scalability = 1.5; // Can afford to scale
+      weights.budgetSuitability = 0.5;
+      weights.scalability = 1.5;
     }
     
-    // SCALE CONSTRAINT
-    // Small scale → simplicity matters
-    // Enterprise → scalability critical
+    // Scale constraint
     if (constraints.scale === 'small') {
-      weights.learningCurve = 1.8; // Need easy to use
-      weights.budgetSuitability = 1.5; // Budget conscious
+      weights.learningCurve = 1.8;
+      weights.budgetSuitability = 1.5;
     } else if (constraints.scale === 'growing') {
-      weights.scalability = 1.5; // Need room to grow
+      weights.scalability = 1.5;
     } else if (constraints.scale === 'enterprise') {
-      weights.scalability = 2.5; // Scalability is critical
-      weights.learningCurve = 0.7; // Can handle complexity
+      weights.scalability = 2.5;
+      weights.learningCurve = 0.7;
     }
     
-    // EXPERTISE CONSTRAINT
-    // Beginner → ease of use critical
-    // Advanced → can handle complexity
+    // Expertise constraint
     if (constraints.expertise === 'beginner') {
-      weights.learningCurve = 2.5; // Must be easy to learn
-      weights.setupSpeed = 1.8; // Need quick wins
+      weights.learningCurve = 2.5;
+      weights.setupSpeed = 1.8;
     } else if (constraints.expertise === 'intermediate') {
-      weights.learningCurve = 1.2; // Moderate importance
+      weights.learningCurve = 1.2;
     } else if (constraints.expertise === 'advanced') {
-      weights.learningCurve = 0.5; // Can handle complexity
-      weights.scalability = 1.5; // Want advanced features
+      weights.learningCurve = 0.5;
+      weights.scalability = 1.5;
     }
     
-    // TIME TO MARKET CONSTRAINT
-    // Fast → speed is everything
-    // Flexible → can take time for better solution
+    // Time to market constraint
     if (constraints.timeToMarket === 'fast') {
-      weights.setupSpeed = 2.5; // Speed critical
-      weights.learningCurve = 1.8; // Need easy setup
+      weights.setupSpeed = 2.5;
+      weights.learningCurve = 1.8;
     } else if (constraints.timeToMarket === 'flexible') {
-      weights.scalability = 1.3; // Can invest in better architecture
+      weights.scalability = 1.3;
     }
     
     return weights;
-  }
+  },
   
   /**
-   * STEP 2: Calculate Weighted Scores
-   * 
-   * Each option has capability scores (1-5 scale).
-   * We multiply by weights and normalize to get final score.
-   * 
-   * Formula: 
-   * score = (capability1 × weight1 + capability2 × weight2 + ...) / sum(weights)
-   * 
-   * @param {Array} options - Options to compare
-   * @param {Object} weights - Importance multipliers
-   * @returns {Object} scores - Final scores per option
+   * Calculate weighted scores for each option
    */
-  static calculateScores(options, weights) {
+  calculateScores(options, weights) {
     const scores = {};
     
     options.forEach(option => {
-      // Weighted sum of all capabilities
       const weightedSum = (
         option.costEfficiency * weights.budgetSuitability +
         option.scalability * weights.scalability +
@@ -108,7 +72,6 @@ class DecisionEngine {
         option.timeToMarket * weights.setupSpeed
       );
       
-      // Calculate sum of weights for normalization
       const weightSum = (
         weights.budgetSuitability +
         weights.scalability +
@@ -116,26 +79,17 @@ class DecisionEngine {
         weights.setupSpeed
       );
       
-      // Normalize to 0-5 scale
       const normalizedScore = weightedSum / weightSum;
-      
-      // Round to 1 decimal place for readability
       scores[option.name] = Math.round(normalizedScore * 10) / 10;
     });
     
     return scores;
-  }
+  },
   
   /**
-   * STEP 3: Extract Pros & Cons
-   * 
-   * Simply return the strengths and weaknesses from option profiles.
-   * This makes results transparent and educational.
-   * 
-   * @param {Array} options - Options being compared
-   * @returns {Object} prosAndCons - Structured pros/cons per option
+   * Extract pros and cons from options
    */
-  static extractProsAndCons(options) {
+  extractProsAndCons(options) {
     const prosAndCons = {};
     
     options.forEach(option => {
@@ -147,38 +101,24 @@ class DecisionEngine {
     });
     
     return prosAndCons;
-  }
+  },
   
   /**
-   * STEP 4: Detect Trade-offs
-   * 
-   * Compare options pairwise to find significant differences.
-   * A difference of 2+ points (on 1-5 scale) is "significant".
-   * 
-   * Trade-off types:
-   * - Cost vs Scalability
-   * - Simplicity vs Flexibility
-   * - Speed vs Long-term Growth
-   * 
-   * @param {Array} options - Options being compared
-   * @returns {Array} tradeoffs - Human-readable trade-off explanations
+   * Detect trade-offs between options
    */
-  static detectTradeoffs(options) {
+  detectTradeoffs(options) {
     const tradeoffs = [];
     
-    // Compare each pair of options
     for (let i = 0; i < options.length; i++) {
       for (let j = i + 1; j < options.length; j++) {
         const opt1 = options[i];
         const opt2 = options[j];
         
-        // TRADE-OFF 1: Cost vs Scalability
-        // If one is cheaper but less scalable
+        // Cost vs Scalability trade-off
         const costDiff = opt1.costEfficiency - opt2.costEfficiency;
         const scaleDiff = opt1.scalability - opt2.scalability;
         
         if (Math.abs(costDiff) >= 2 && costDiff * scaleDiff < 0) {
-          // They trade off (one cheaper, other more scalable)
           const cheaper = costDiff > 0 ? opt1.name : opt2.name;
           const scalable = scaleDiff > 0 ? opt1.name : opt2.name;
           tradeoffs.push(
@@ -186,8 +126,7 @@ class DecisionEngine {
           );
         }
         
-        // TRADE-OFF 2: Simplicity vs Flexibility
-        // If one is easier but less powerful
+        // Simplicity vs Flexibility trade-off
         const easeDiff = opt1.easeOfUse - opt2.easeOfUse;
         const powerDiff = opt1.scalability - opt2.scalability;
         
@@ -199,8 +138,7 @@ class DecisionEngine {
           );
         }
         
-        // TRADE-OFF 3: Speed vs Long-term
-        // If one is faster to set up but less scalable
+        // Speed vs Long-term trade-off
         const speedDiff = opt1.timeToMarket - opt2.timeToMarket;
         const longTermDiff = opt1.scalability - opt2.scalability;
         
@@ -214,7 +152,6 @@ class DecisionEngine {
       }
     }
     
-    // If no specific trade-offs detected, add general ones
     if (tradeoffs.length === 0) {
       tradeoffs.push(
         '⚖️ Both options have similar trade-off profiles. Your choice depends on specific team preferences and existing infrastructure.'
@@ -222,21 +159,12 @@ class DecisionEngine {
     }
     
     return tradeoffs;
-  }
+  },
   
   /**
-   * STEP 5: Generate Balanced Recommendation
-   * 
-   * CRITICAL RULE: Never declare a single "best" option.
-   * Always use conditional language: "If X, choose A. If Y, choose B."
-   * 
-   * @param {Array} options - Options being compared
-   * @param {Object} scores - Calculated scores
-   * @param {Object} constraints - User constraints
-   * @returns {String} recommendation - Balanced recommendation text
+   * Generate balanced recommendation
    */
-  static generateRecommendation(options, scores, constraints) {
-    // Sort options by score
+  generateRecommendation(options, scores, constraints) {
     const sortedOptions = Object.entries(scores)
       .sort(([, a], [, b]) => b - a)
       .map(([name]) => name);
@@ -249,16 +177,12 @@ class DecisionEngine {
     
     let recommendation = '';
     
-    // CASE 1: Very close scores (< 0.5 difference)
-    // Both are equally good, explain when to choose each
     if (scoreDiff < 0.5) {
       recommendation = `Both ${topOption} (${topScore}) and ${secondOption} (${secondScore}) are excellent choices for your needs. The decision comes down to specific priorities:\n\n`;
       
-      // Find the top option's data
       const topData = options.find(opt => opt.name === topOption);
       const secondData = options.find(opt => opt.name === secondOption);
       
-      // Compare key capabilities
       if (topData.costEfficiency > secondData.costEfficiency) {
         recommendation += `• Choose ${topOption} if: Budget is your top concern\n`;
       } else {
@@ -276,13 +200,9 @@ class DecisionEngine {
       } else {
         recommendation += `• Choose ${secondOption} if: Ease of use is critical\n`;
       }
-    }
-    // CASE 2: Clear leader (≥ 0.5 difference)
-    // One scores higher, but still explain alternatives
-    else {
+    } else {
       recommendation = `${topOption} scores higher (${topScore} vs ${secondScore}) for your specific constraints, but here's what to consider:\n\n`;
       
-      // Explain why top option scored higher
       const priorityMap = {
         low: 'budget constraints',
         small: 'small scale needs',
@@ -300,7 +220,6 @@ class DecisionEngine {
         recommendation += `${topOption} aligns well with your ${priorities.join(', ')}.\n\n`;
       }
       
-      // But still present the alternative
       recommendation += `However, ${secondOption} might be better if:\n`;
       
       const secondData = options.find(opt => opt.name === secondOption);
@@ -318,67 +237,14 @@ class DecisionEngine {
     }
     
     return recommendation;
-  }
+  },
   
   /**
-   * MAIN ANALYSIS FUNCTION
-   * 
-   * Orchestrates the entire decision-making process:
-   * 1. Calculate weights from constraints
-   * 2. Calculate scores for each option
-   * 3. Extract pros and cons
-   * 4. Detect trade-offs
-   * 5. Generate balanced recommendation
-   * 
-   * @param {String} category - Category being compared
-   * @param {Array} selectedOptions - Options to compare
-   * @param {Object} constraints - User's constraints
-   * @returns {Object} analysis - Complete analysis results
+   * Explain reasoning behind the analysis
    */
-  static analyze(category, selectedOptions, constraints) {
-    // STEP 1: Calculate constraint-based weights
-    const weights = this.calculateWeights(constraints);
-    
-    // STEP 2: Calculate weighted scores
-    const scores = this.calculateScores(selectedOptions, weights);
-    
-    // STEP 3: Extract pros and cons
-    const prosAndCons = this.extractProsAndCons(selectedOptions);
-    
-    // STEP 4: Detect trade-offs
-    const tradeoffs = this.detectTradeoffs(selectedOptions);
-    
-    // STEP 5: Generate balanced recommendation
-    const recommendation = this.generateRecommendation(selectedOptions, scores, constraints);
-    
-    // STEP 6: Explain reasoning
-    const reasoning = this.explainReasoning(constraints, weights);
-    
-    // Return complete analysis
-    return {
-      scores,           // Numerical scores per option
-      prosAndCons,      // Strengths and weaknesses
-      tradeoffs,        // Trade-off explanations
-      recommendation,   // Balanced recommendation text
-      reasoning,        // Why we scored this way
-      options: selectedOptions  // Original option data
-    };
-  }
-  
-  /**
-   * EXPLAIN REASONING
-   * 
-   * Transparently explain how constraints influenced the analysis.
-   * This builds trust and educates users.
-   * 
-   * @param {Object} constraints - User constraints
-   * @param {Object} weights - Calculated weights
-   * @returns {String} reasoning - Human-readable explanation
-   */
-  static explainReasoning(constraints, weights) {
+  explainReasoning(constraints, weights) {
     let reasoning = 'Here\'s how your constraints influenced our analysis:\n\n';
     
-    // Budget reasoning
     reasoning += `💰 Budget (${constraints.budget}): `;
     if (constraints.budget === 'low') {
       reasoning += `We prioritized cost-effectiveness heavily (${weights.budgetSuitability}x weight)\n`;
@@ -388,7 +254,6 @@ class DecisionEngine {
       reasoning += `We balanced cost and features equally\n`;
     }
     
-    // Scale reasoning
     reasoning += `📈 Scale (${constraints.scale}): `;
     if (constraints.scale === 'small') {
       reasoning += `We emphasized simplicity and ease of use (${weights.learningCurve}x weight)\n`;
@@ -398,7 +263,6 @@ class DecisionEngine {
       reasoning += `We balanced current needs with growth potential\n`;
     }
     
-    // Expertise reasoning
     reasoning += `🎓 Expertise (${constraints.expertise}): `;
     if (constraints.expertise === 'beginner') {
       reasoning += `We heavily weighted ease of learning (${weights.learningCurve}x weight)\n`;
@@ -408,7 +272,6 @@ class DecisionEngine {
       reasoning += `We balanced learning curve with capabilities\n`;
     }
     
-    // Time to market reasoning
     reasoning += `⚡ Time to Market (${constraints.timeToMarket}): `;
     if (constraints.timeToMarket === 'fast') {
       reasoning += `We prioritized quick setup and deployment (${weights.setupSpeed}x weight)\n`;
@@ -417,7 +280,26 @@ class DecisionEngine {
     }
     
     return reasoning;
+  },
+  
+  /**
+   * Main analysis function
+   */
+  analyze(category, selectedOptions, constraints) {
+    const weights = this.calculateWeights(constraints);
+    const scores = this.calculateScores(selectedOptions, weights);
+    const prosAndCons = this.extractProsAndCons(selectedOptions);
+    const tradeoffs = this.detectTradeoffs(selectedOptions);
+    const recommendation = this.generateRecommendation(selectedOptions, scores, constraints);
+    const reasoning = this.explainReasoning(constraints, weights);
+    
+    return {
+      scores,
+      prosAndCons,
+      tradeoffs,
+      recommendation,
+      reasoning,
+      options: selectedOptions
+    };
   }
-}
-
-module.exports = DecisionEngine;
+};

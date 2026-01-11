@@ -1,11 +1,9 @@
 /**
- * RefereeAI - Complete Category Data
- * Production-ready comparison templates with real-world options
+ * RefereeAI - Category Data
+ * All categories and options for comparison
  */
 
-const categories = {
-  
-  // CATEGORY 1: Programming Languages
+const CATEGORIES = {
   'programming-languages': {
     id: 'programming-languages',
     category: 'Programming Languages',
@@ -160,7 +158,6 @@ const categories = {
     ]
   },
 
-  // CATEGORY 2: Backend Frameworks
   'backend-frameworks': {
     id: 'backend-frameworks',
     category: 'Backend Frameworks',
@@ -292,11 +289,8 @@ const categories = {
   }
 };
 
-module.exports = categories;
-
-
-// CATEGORY 3: Frontend Frameworks
-categories['frontend-frameworks'] = {
+// Add remaining categories
+CATEGORIES['frontend-frameworks'] = {
   id: 'frontend-frameworks',
   category: 'Frontend Frameworks',
   title: 'Frontend Framework Comparison',
@@ -402,8 +396,7 @@ categories['frontend-frameworks'] = {
   ]
 };
 
-// CATEGORY 4: Databases
-categories['databases'] = {
+CATEGORIES['databases'] = {
   id: 'databases',
   category: 'Databases',
   title: 'Database Comparison',
@@ -533,8 +526,7 @@ categories['databases'] = {
   ]
 };
 
-// CATEGORY 5: Cloud Providers
-categories['cloud-providers'] = {
+CATEGORIES['cloud-providers'] = {
   id: 'cloud-providers',
   category: 'Cloud Providers',
   title: 'Cloud Platform Comparison',
@@ -641,8 +633,7 @@ categories['cloud-providers'] = {
 };
 
 
-// CATEGORY 6: DevOps & Deployment
-categories['devops-deployment'] = {
+CATEGORIES['devops-deployment'] = {
   id: 'devops-deployment',
   category: 'DevOps & Deployment',
   title: 'Deployment Strategy Comparison',
@@ -748,8 +739,7 @@ categories['devops-deployment'] = {
   ]
 };
 
-// CATEGORY 7: API Architectures
-categories['api-architectures'] = {
+CATEGORIES['api-architectures'] = {
   id: 'api-architectures',
   category: 'API Architectures',
   title: 'API Architecture Comparison',
@@ -831,8 +821,7 @@ categories['api-architectures'] = {
   ]
 };
 
-// CATEGORY 8: Authentication Methods
-categories['authentication'] = {
+CATEGORIES['authentication'] = {
   id: 'authentication',
   category: 'Authentication Methods',
   title: 'Authentication Strategy Comparison',
@@ -938,8 +927,7 @@ categories['authentication'] = {
   ]
 };
 
-// CATEGORY 9: Learning Paths
-categories['learning-paths'] = {
+CATEGORIES['learning-paths'] = {
   id: 'learning-paths',
   category: 'Learning Paths',
   title: 'Learning Path Comparison',
@@ -1045,8 +1033,7 @@ categories['learning-paths'] = {
   ]
 };
 
-// CATEGORY 10: Career Choices
-categories['career-choices'] = {
+CATEGORIES['career-choices'] = {
   id: 'career-choices',
   category: 'Career Choices',
   title: 'Career Path Comparison',

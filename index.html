@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RefereeAI - Make informed technical decisions through constraint-based comparison">
+    <title>RefereeAI - Smart Technical Decision Making</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Sparkles Canvas Background -->
+    <canvas id="sparkles-canvas"></canvas>
+    <!-- Header / Navbar -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏆</span>
+                    <span class="logo-text">RefereeAI</span>
+                </div>
+                <nav class="nav">
+                    <button class="nav-link" data-action="show-categories">Categories</button>
+                    <button class="nav-link" data-action="show-how-it-works">How it Works</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            
+            <!-- Hero Section -->
+            <section id="hero" class="hero">
+                <h1 class="hero-title">Make Informed Decisions</h1>
+                <p class="hero-subtitle">Compare technical options with clarity. Understand trade-offs. Choose with confidence.</p>
+            </section>
+
+            <!-- Category Selection -->
+            <section id="categories" class="section">
+                <h2 class="section-title">Select a Category</h2>
+                <div id="category-grid" class="category-grid">
+                    <!-- Categories will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Option Selection -->
+            <section id="options" class="section hidden">
+                <button class="back-button" data-action="back-to-categories">← Back to Categories</button>
+                <h2 class="section-title" id="category-title"></h2>
+                <p class="section-description" id="category-description"></p>
+                
+                <div class="form-section">
+                    <h3 class="form-title">Select Options to Compare (minimum 2)</h3>
+                    <div id="options-grid" class="options-grid">
+                        <!-- Options will be dynamically inserted here -->
+                    </div>
+                    <p class="error-message hidden" id="options-error">Please select at least 2 options to compare</p>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-title">Define Your Constraints</h3>
+                    <div class="constraints-grid">
+                        <div class="constraint-group">
+                            <label for="budget" class="constraint-label">Budget</label>
+                            <select id="budget" class="constraint-select">
+                                <option value="">Select...</option>
+                                <option value="low">Low - Cost is a major concern</option>
+                                <option value="medium">Medium - Balanced budget</option>
+                                <option value="high">High - Budget is flexible</option>
+                            </select>
+                        </div>
+
+                        <div class="constraint-group">
+                            <label for="scale" class="constraint-label">Scale</label>
+                            <select id="scale" class="constraint-select">
+                                <option value="">Select...</option>
+                                <option value="small">Small - Personal or small team</option>
+                                <option value="growing">Growing - Expanding user base</option>
+                                <option value="enterprise">Enterprise - Large scale deployment</option>
+                            </select>
+                        </div>
+
+                        <div class="constraint-group">
+                            <label for="expertise" class="constraint-label">Team Expertise</label>
+                            <select id="expertise" class="constraint-select">
+                                <option value="">Select...</option>
+                                <option value="beginner">Beginner - Learning the basics</option>
+                                <option value="intermediate">Intermediate - Some experience</option>
+                                <option value="advanced">Advanced - Expert level</option>
+                            </select>
+                        </div>
+
+                        <div class="constraint-group">
+                            <label for="timeToMarket" class="constraint-label">Time to Market</label>
+                            <select id="timeToMarket" class="constraint-select">
+                                <option value="">Select...</option>
+                                <option value="fast">Fast - Need to launch quickly</option>
+                                <option value="moderate">Moderate - Standard timeline</option>
+                                <option value="flexible">Flexible - Can take time</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p class="error-message hidden" id="constraints-error">Please fill in all constraints</p>
+                </div>
+
+                <div class="form-actions">
+                    <button id="compare-button" class="button button-primary" disabled>Compare Options</button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results" class="section hidden">
+                <button class="back-button" data-action="back-to-options">← Back to Options</button>
+                <h2 class="results-main-title">Comparison Results</h2>
+
+                <!-- Scores -->
+                <div class="results-card">
+                    <h3 class="results-subtitle">Scores</h3>
+                    <div id="scores-table" class="scores-table">
+                        <!-- Scores will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <!-- Detailed Analysis -->
+                <div class="results-card">
+                    <h3 class="results-subtitle">Detailed Analysis</h3>
+                    <div id="detailed-analysis">
+                        <!-- Detailed analysis will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <!-- Recommendation -->
+                <div class="results-card">
+                    <h3 class="results-subtitle">Recommendation</h3>
+                    <div id="recommendation" class="recommendation-text">
+                        <!-- Recommendation will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <!-- Trade-offs -->
+                <div class="results-card">
+                    <h3 class="results-subtitle">Trade-offs</h3>
+                    <div id="tradeoffs" class="tradeoffs-list">
+                        <!-- Trade-offs will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <!-- How We Compared -->
+                <div class="results-card">
+                    <h3 class="results-subtitle">How We Compared These Options</h3>
+                    <div id="reasoning" class="reasoning-text">
+                        <!-- Reasoning will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="results-actions">
+                    <button class="button button-primary" data-action="download-results">📄 Download Report</button>
+                    <button class="button button-secondary" data-action="new-comparison">🔄 New Comparison</button>
+                    <button class="button button-secondary" data-action="back-to-categories">🏠 Browse Categories</button>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section id="how-it-works" class="section">
+                <h2 class="section-title">How It Works</h2>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Select a Category</h3>
+                        <p class="step-description">Choose from programming languages, frameworks, databases, cloud providers, and more.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Define Your Constraints</h3>
+                        <p class="step-description">Tell us about your budget, scale, team expertise, and timeline to get personalized insights.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Get Clear Analysis</h3>
+                        <p class="step-description">Receive detailed comparisons, understand trade-offs, and make confident decisions based on your needs.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">Built with ❤️ for better technical decision-making</p>
+            <p class="footer-subtext">No authentication, no paid APIs, no complexity—just smart comparisons.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="scripts/data.js"></script>
+    <script src="scripts/decisionEngine.js"></script>
+    <script src="scripts/sparkles.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>

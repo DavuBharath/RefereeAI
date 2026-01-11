@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparkles Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        #sparkles-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .content {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to bottom, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        p {
+            font-size: 1.5rem;
+            color: #a1a1aa;
+        }
+        
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sparkles Background -->
+    <div id="sparkles-background"></div>
+    
+    <!-- Content -->
+    <div class="content">
+        <h1>Sparkles Test</h1>
+        <p>If you see white particles floating, it's working! ✨</p>
+        <div class="status" id="status">Loading...</div>
+    </div>
+    
+    <!-- tsParticles Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/engine@3.0.3/tsparticles.engine.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.0.3/tsparticles.slim.min.js"></script>
+    
+    <!-- Sparkles Script -->
+    <script>
+        (async function() {
+            const statusEl = document.getElementById('status');
+            
+            try {
+                statusEl.textContent = 'Checking tsParticles...';
+                
+                // Wait a bit for libraries to load
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                if (typeof window.tsParticles === 'undefined') {
+                    statusEl.textContent = '❌ tsParticles not loaded';
+                    statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+                    return;
+                }
+                
+                if (typeof window.loadSlim === 'undefined') {
+                    statusEl.textContent = '❌ loadSlim not available';
+                    statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+                    return;
+                }
+                
+                statusEl.textContent = 'Initializing particles...';
+                
+                // Initialize the slim preset
+                await window.loadSlim(window.tsParticles);
+                
+                // Load particles
+                const container = await window.tsParticles.load({
+                    id: 'sparkles-background',
+                    options: {
+                        background: {
+                            color: {
+                                value: 'transparent',
+                            },
+                        },
+                        fullScreen: {
+                            enable: false,
+                        },
+                        fpsLimit: 120,
+                        interactivity: {
+                            events: {
+                                onClick: {
+                                    enable: true,
+                                    mode: 'push',
+                                },
+                                onHover: {
+                                    enable: true,
+                                    mode: 'repulse',
+                                },
+                                resize: {
+                                    enable: true,
+                                },
+                            },
+                            modes: {
+                                push: {
+                                    quantity: 4,
+                                },
+                                repulse: {
+                                    distance: 200,
+                                    duration: 0.4,
+                                },
+                            },
+                        },
+                        particles: {
+                            color: {
+                                value: '#ffffff',
+                            },
+                            links: {
+                                enable: false,
+                            },
+                            move: {
+                                enable: true,
+                                speed: 0.5,
+                                direction: 'none',
+                                random: true,
+                                straight: false,
+                                outModes: {
+                                    default: 'out',
+                                },
+                            },
+                            number: {
+                                density: {
+                                    enable: true,
+                                    width: 800,
+                                    height: 800,
+                                },
+                                value: 100,
+                            },
+                            opacity: {
+                                value: {
+                                    min: 0.1,
+                                    max: 1,
+                                },
+                                animation: {
+                                    enable: true,
+                                    speed: 1,
+                                    sync: false,
+                                    mode: 'auto',
+                                    startValue: 'random',
+                                    destroy: 'none',
+                                },
+                            },
+                            shape: {
+                                type: 'circle',
+                            },
+                            size: {
+                                value: {
+                                    min: 0.5,
+                                    max: 2.5,
+                                },
+                            },
+                        },
+                        detectRetina: true,
+                    },
+                });
+                
+                if (container) {
+                    statusEl.textContent = '✨ Sparkles working! Hover and click to interact.';
+                    statusEl.style.background = 'rgba(16, 185, 129, 0.2)';
+                    console.log('✨ Sparkles initialized successfully');
+                } else {
+                    statusEl.textContent = '❌ Container creation failed';
+                    statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+                }
+            } catch (error) {
+                statusEl.textContent = '❌ Error: ' + error.message;
+                statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+                console.error('Error:', error);
+            }
+        })();
+    </script>
+</body>
+</html>
