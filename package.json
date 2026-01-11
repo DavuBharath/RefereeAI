@@ -1,0 +1,25 @@
+{
+  "name": "ai-referee",
+  "version": "1.0.0",
+  "description": "AI Referee - A tool to compare technical options and explain trade-offs",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "demo": "node demo.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "helmet": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["ai", "comparison", "decision-making", "referee"],
+  "author": "AI Referee Team",
+  "license": "MIT"
+}
