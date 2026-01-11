@@ -1,4 +1,4 @@
-# RefereeAI 🏆 - Vanilla Edition
+# RefereeAI 🏆 
 
 **Smart technical decision-making through constraint-based comparison and trade-off analysis.**
 
